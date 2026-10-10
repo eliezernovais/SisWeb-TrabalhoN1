@@ -5,9 +5,9 @@ app.use(express.json());
 
 // meu banco de dados fake
 let estoque = [
-  { id: 1, nome: 'Hamburguer', qtd: 10 },
-  { id: 2, nome: 'X-Burguer', qtd: 15 },
-  { id: 3, nome: 'Batata Frita', qtd: 20 },
+  { CodProduto: 1, nome: 'Hamburguer', Qtd: 10 },
+  { CodProduto: 2, nome: 'X-Burguer', Qtd: 15 },
+  { CodProduto: 3, nome: 'Batata Frita', Qtd: 20 },
 ];
 
 // rota pra ver o estoque
@@ -27,13 +27,13 @@ app.post('/baixa', (req, res) => {
   // primeiro loop confere se TODOS os itens estao corretos e se tem estoque
   for (let i = 0; i < itens.length; i++) {
     const itemReq = itens[i];
-    const produtoNoEstoque = estoque.find(p => p.id === itemReq.id);
+    const produtoNoEstoque = estoque.find(p => p.CodProduto === itemReq.CodProduto);
 
     if (!produtoNoEstoque) {
-      return res.status(404).send('Produto não encontrado: ' + itemReq.id);
+      return res.status(404).send('Produto não encontrado: ' + itemReq.CodProduto);
     }
 
-    if (produtoNoEstoque.qtd < itemReq.qtd) {
+    if (produtoNoEstoque.Qtd < itemReq.Qtd) {
       return res.status(400).send('estoque insuficiente pra: ' + produtoNoEstoque.nome);
     }
   }
@@ -41,15 +41,15 @@ app.post('/baixa', (req, res) => {
   // segundo loop so roda se o primeiro loop passou sem erros
   for (let i = 0; i < itens.length; i++) {
     const itemReq = itens[i];
-    const produtoNoEstoque = estoque.find(p => p.id === itemReq.id);
+    const produtoNoEstoque = estoque.find(p => p.CodProduto === itemReq.CodProduto);
     
-    produtoNoEstoque.qtd -= itemReq.qtd;
+    produtoNoEstoque.Qtd -= itemReq.Qtd;
   }
 
   res.send({ mensagem: 'Baixa feita com sucesso!', estoque: estoque });
 });
 
-// terceiro loop rota p repor produtos no estoque 
+// rota p repor produtos no estoque 
 app.post('/reposicao', (req, res) => {
   const itens = req.body;
 
@@ -60,19 +60,19 @@ app.post('/reposicao', (req, res) => {
   // confere se todos os produtos existem antes de somar
   for (let i = 0; i < itens.length; i++) {
     const itemReq = itens[i];
-    const produtoNoEstoque = estoque.find(p => p.id === itemReq.id);
+    const produtoNoEstoque = estoque.find(p => p.CodProduto === itemReq.CodProduto);
 
     if (!produtoNoEstoque) {
-      return res.status(404).send('Produto não encontrado: ' + itemReq.id);
+      return res.status(404).send('Produto não encontrado: ' + itemReq.CodProduto);
     }
   } 
 
   // se todos existem, faz a reposicao
   for (let i = 0; i < itens.length; i++) {
     const itemReq = itens[i];
-    const produtoNoEstoque = estoque.find(p => p.id === itemReq.id);
+    const produtoNoEstoque = estoque.find(p => p.CodProduto === itemReq.CodProduto);
 
-    produtoNoEstoque.qtd += itemReq.qtd;
+    produtoNoEstoque.Qtd += itemReq.Qtd;
   }
 
   res.send({ mensagem: 'reposição feita!', estoque: estoque });
@@ -80,5 +80,5 @@ app.post('/reposicao', (req, res) => {
 
 // inicializa o servidor na porta 3002
 app.listen(3002, () => {
-  console.log('Servido rodando na porta 3002');
+  console.log('Servidor rodando em http://localhost:3002');
 });
