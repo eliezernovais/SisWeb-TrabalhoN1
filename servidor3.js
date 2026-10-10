@@ -78,7 +78,7 @@ app.post('/reposicao', (req, res) => {
   res.send({ mensagem: 'reposição feita!', estoque: estoque });
 });
 
-// inicializa o servidor na porta 3000
-app.listen(3000, () => {
-  console.log('Servido rodando na porta 3000');
+// inicializa o servidor na porta 3002
+app.listen(3002, () => {
+  console.log('Servido rodando na porta 3002');
 });
