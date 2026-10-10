@@ -68,6 +68,10 @@ app.post('/pedidos', async (req, res) => {
     }
     for (const item of pedido.Itens) {
         const produto = produtos.find(p => p.CodProduto === item.CodProduto);
+        if (!produto) {
+            return res.status(400).json({ erro: `Produto não encontrado: ${item.CodProduto}` });
+        }
+        item.nomeProduto = produto.nome;
         pedido.totalPedido += item.Qtd * produto.preco;
         pedido.id = pedidos.length + 1;
     }
